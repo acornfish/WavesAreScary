@@ -1,3 +1,6 @@
+; Was this worth the effort? No way
+; Will I do it again? Most likely
+
 %define row          0    
 %define col          4    
 %define width        8    
@@ -26,10 +29,11 @@
 %define fixinfo_line_length 48
 
 fb:  db "/dev/fb0", 0
-ship_color: dd 0xFFF31B6B
-sea_color: dd 0xFF2E70F3
-wave_color: dd 0xFFFFFFFF
-digits: dd "0123456789"
+
+colors: dd 0xFF2E70F3, 0xFFFFFFFF, 0xFF8F563B, 0xFF451506
+ship_sprite: db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,3,2,2,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,3,2,2,2,1,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,3,2,2,1,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,3,2,2,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,3,2,2,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,3,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+wave_sprite: db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,1,0,0,0,1,1,1,0,1,1,1,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+very_important_variable: db 'I like eating fried cats', 0
 
 sh: 
     dq _exit
@@ -81,11 +85,11 @@ _start:
     mov r15, rax
 
     ; enter graphics mode
-    mov rdi, 0
-    mov rax, 16
-    mov rsi, 0x4B3A
-    mov rdx, 1
-    syscall
+    ; mov rdi, 0
+    ; mov rax, 16
+    ; mov rsi, 0x4B3A
+    ; mov rdx, 1
+    ; syscall
 
     
     ;open framebuffer
@@ -303,7 +307,7 @@ drawCanvas:
 
         ; determine what to draw
         ; default state 
-        mov ebx, [sea_color]
+        mov ebx, [colors]
           
         call is_ship
         call is_wave
@@ -346,7 +350,35 @@ is_ship:
     cmp r10d, eax
     jg .out
 
-    mov ebx, [ship_color]
+    ;map row to sprite
+    mov eax, [r15+row]
+    mov r10d, 100
+    xor edx, edx
+    div r10d
+    mov eax, edx
+    mov r10d, 5
+    xor edx, edx
+    div r10d
+    mov r11d, eax
+
+    ;map collumn to sprite
+    mov r10d, 100
+    mov eax, [r15+col]
+    xor edx, edx
+    div r10d
+    mov eax, edx
+    mov r10d, 5
+    xor edx, edx
+    div r10d
+    mov r10d, eax
+
+    imul r11, 20
+
+    mov rax, r11
+    add rax, r10
+    mov r10b, [ship_sprite+rax]
+    mov ebx, [colors+r10*4]
+
     .out:
         pop rcx
         ret
@@ -397,10 +429,41 @@ is_wave:
         cmp r11d, eax
         jg .njet
 
-        mov ebx, [wave_color]
+        call _map_wave_sprite
         .njet:
             loop .inner_loop
     pop rcx
+    ret
+
+_map_wave_sprite:
+    ;map row to sprite
+    mov eax, [r15+row]
+    mov r10d, 100
+    xor edx, edx
+    div r10d
+    mov eax, edx
+    mov r10d, 5
+    xor edx, edx
+    div r10d
+    mov r11d, eax
+
+    ;map collumn to sprite
+    mov r10d, 100
+    mov eax, [r15+col]
+    xor edx, edx
+    div r10d
+    mov eax, edx
+    mov r10d, 5
+    xor edx, edx
+    div r10d
+    mov r10d, eax
+
+    imul r11, 20
+
+    mov rax, r11
+    add rax, r10
+    mov r10b, [wave_sprite+rax]
+    mov ebx, [colors+r10*4]
     ret
 
 _getTime:

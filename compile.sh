@@ -1,3 +1,3 @@
-nasm -f bin -o main.out main.asm -w-zeroing
-chmod +x main.out
-strace ./main.out
+nasm -f bin -o wavesAreScary.elf main.asm -w-zeroing
+chmod +x wavesAreScary.elf
+qrencode -r wavesAreScary.elf -o wavesAreScary.png -v 4 -8  
