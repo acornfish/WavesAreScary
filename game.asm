@@ -72,7 +72,6 @@ _start:
     mov rdi, 11
     syscall
 
-
     ;Allocate storage area
     mov rax, 9          ; sys_mmap
     xor rdi, rdi        ; addr=0
@@ -85,11 +84,11 @@ _start:
     mov r15, rax
 
     ; enter graphics mode
-    ; mov rdi, 0
-    ; mov rax, 16
-    ; mov rsi, 0x4B3A
-    ; mov rdx, 1
-    ; syscall
+    mov rdi, 0
+    mov rax, 16
+    mov rsi, 0x4B3A
+    mov rdx, 1
+    syscall
 
     
     ;open framebuffer
@@ -168,7 +167,6 @@ _start:
     mov [r15+pFramebuffer], rax
 
     ;assign variables
-    mov BYTE [r15+seed], 124
     mov DWORD [r15+speed], 450
     call _getTime
     mov [r15+lastCycle], rax
@@ -219,12 +217,14 @@ gameLoop:
         mov [r15+lastCycle], rax
 
         mov rax, [r15+speed]
-        mov rbx, 40
+        cmp rax, 300
+        jle .ds
+        mov rbx, 100
         imul rbx
-        mov rbx, 43 ; diffrence between this two values determine how hard the game gets
+        mov rbx, 102
         div rbx
         mov [r15+speed], rax
-
+        .ds: 
         call updateWaves
     draw: 
         call drawCanvas
@@ -252,7 +252,7 @@ updateWaves:
         cmp rax, rbx
         jle .bypass
         xor rax,rax
-        mov al, -2
+        mov al, -1
         mov BYTE [r15+r10+waves], al
         mov eax, [r15+score]
         inc eax
